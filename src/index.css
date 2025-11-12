@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+
+@theme {
+    --font-inter: "Inter", sans-serif;
+
+    --color-primary-50: #FFF0E6;
+    --color-primary-100: #FFD1B0;
+    --color-primary-200: #FFBA8A;
+    --color-primary-300: #FF9B54;
+    --color-primary-400: #FF8833;
+    --color-primary-500: #FF6A00;
+    --color-primary-600: #E86000;
+    --color-primary-700: #B54B00;
+    --color-primary-800: #8C3A00;
+    --color-primary-900: #6B2D00;
+    --color-primary-950: #6B2D00;
+
+    --color-gray-50: #F9FAFB;
+    --color-gray-100: #F2F4F7;
+    --color-gray-200: #EAECF0;
+    --color-gray-300: #D0D5DD;
+    --color-gray-400: #98A2B3;
+    --color-gray-500: #667085;
+    --color-gray-600: #475467;
+    --color-gray-700: #344054;
+    --color-gray-800: #1D2939;
+    --color-gray-900: #101828;
+    --color-gray-950: #0C111D;
+
+
+    --color-error-50: #FEF3F2;
+    --color-error-100: #FEE4E2;
+    --color-error-200: #FECDCA;
+    --color-error-300: #FDA29B;
+    --color-error-400: #F97066;
+    --color-error-500: #F04438;
+    --color-error-600: #D92D20;
+    --color-error-700: #B42318;
+    --color-error-800: #912018;
+    --color-error-900: #7A271A;
+    --color-error-950: #55160C;
+
+
+    --color-warning-50: #FFFAEB;
+    --color-warning-100: #FEF0C7;
+    --color-warning-200: #FEDF89;
+    --color-warning-300: #FEC84B;
+    --color-warning-400: #FDB022;
+    --color-warning-500: #F79009;
+    --color-warning-600: #DC6803;
+    --color-warning-700: #B54708;
+    --color-warning-800: #93370D;
+    --color-warning-900: #7A2E0E;
+    --color-warning-950: #4E1D09;
+
+    --color-success-50: #ECFDF3;
+    --color-success-100: #DCFAE6;
+    --color-success-200: #A9EFC5;
+    --color-success-300: #75E0A7;
+    --color-success-400: #47CD89;
+    --color-success-500: #17B26A;
+    --color-success-600: #079455;
+    --color-success-700: #067647;
+    --color-success-800: #085D3A;
+    --color-success-900: #074D31;
+    --color-success-950: #053321;
+
+    --color-slate-gray: #2B2B2B;
+}
+
+
+@layer base {
+    * {
+        @apply font-inter;
+    }
+}
