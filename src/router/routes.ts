@@ -3,6 +3,7 @@ import {mainLayoutGuard} from "@/router";
 import {MainLayout} from "../layouts/main-layout.tsx";
 import {AuthLayout} from "../layouts/auth-layout.tsx";
 import {SignUp} from "@/pages/auth/sign-up.tsx";
+import {View} from "@/pages/view.tsx";
 
 
 export const _routes: RouteObject[] = [
@@ -18,8 +19,13 @@ export const _routes: RouteObject[] = [
         Component: AuthLayout,
         children: [
             {
-                id: "signUp",
+                id: "authDefault",
                 index: true,
+                Component: View
+            },
+            {
+                id: "signUp",
+                path: "signUp/:mode",
                 Component: SignUp
             }
         ]

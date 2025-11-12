@@ -12,7 +12,7 @@ interface RadioItemProps {
 
 const RadioItem = ({title, subtitle, selected, value, onClick}: RadioItemProps) => {
     return <div onClick={() => onClick(value)} className={cn(
-        "rounded-2xl bg-gray-50 border border-gray-50  py-3 px-5 flex justify-between items-center cursor-pointer",
+        "rounded-2xl bg-gray-100 border border-gray-100  py-3 px-5 flex justify-between items-center cursor-pointer",
         selected && "border-primary-500 "
     )}>
         <div className="flex flex-col gap-1">
@@ -42,10 +42,11 @@ interface RadioSelectProps {
     }[];
     value?: number | string;
     onChange?: (value: number | string) => void;
+    className?: string;
 }
 
-export const RadioSelect = ({items, value, onChange}: RadioSelectProps) => {
-    return <div className="flex flex-col gap-4">
+export const RadioSelect = ({items, value, onChange, className}: RadioSelectProps) => {
+    return <div className={cn("flex flex-col gap-4", className)}>
         {
             items?.map((item, index) => <RadioItem
                 key={index}

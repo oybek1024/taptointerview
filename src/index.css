@@ -66,7 +66,10 @@
     --color-success-900: #074D31;
     --color-success-950: #053321;
 
+    --color-primary: #FF6A00;
+
     --color-slate-gray: #2B2B2B;
+    --color-unknown-gray: #F6F6F6;
 }
 
 
@@ -74,4 +77,20 @@
     * {
         @apply font-inter;
     }
+}
+
+@layer components {
+    .ant-input::placeholder {
+        @apply font-light text-gray-400;
+    }
+
+    .ant-form-item-explain-error {
+        @apply text-xs text-red-600 font-light;
+    }
+}
+
+
+.ant-steps-item-title::after {
+    height: 2px !important;
+    transform: translateX(-10px);
 }
