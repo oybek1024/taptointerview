@@ -1,0 +1,14 @@
+.ant-otp-input {
+    width: 60px !important; /* Box width */
+    height: 60px !important; /* Box height */
+    font-size: 40px !important; /* Text size */
+    text-align: center !important;
+    color: var(--color-primary) !important;
+    font-weight: 500 !important;
+}
+
+.ant-otp-input::placeholder {
+    content: "0" !important;
+    color: var(--color-gray-300) !important;
+    font-weight: 500 !important;
+}

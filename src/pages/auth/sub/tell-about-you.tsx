@@ -1,13 +1,15 @@
+import * as React from "react";
+import {useRef, useState} from "react";
 import {PageTitle} from "@/pages/auth/components/page-title.tsx";
-import {Button, Form, Input, Steps} from "antd";
-import {cn} from "@/lib/utils.ts";
+import {Button, Form, Input} from "antd";
 import {formatUSPhone} from "@/utils";
-import {ArrowDown2} from "iconsax-reactjs";
+import {ArrowDown2, ArrowLeft} from "iconsax-reactjs";
 import {themeColors} from "@/config/theme.ts";
 import {ModalSelect} from "@/components/SelectModal.tsx";
-import {useRef} from "react";
-import type {ModalRef} from "@/components/Modals.tsx";
-// import {type ModalRef, SelectModal} from "@/components/Modals.tsx";
+import {CustomModal, type ModalRef} from "@/components/Modals.tsx";
+import {OTPInput} from "@/components/OTPInput.tsx";
+import {useRouter} from "@/hooks/useRouter.ts";
+import {CSteps} from "@/components/CSteps.tsx";
 
 export const TellAboutYou = () => {
     return <div className="flex flex-col gap-5 mt-4 pt-5">
@@ -25,43 +27,26 @@ export const TellAboutYou = () => {
     </div>
 }
 
-export const CSteps = ({currentStep = 0}: { currentStep?: number }) => {
-    return <Steps
-        className="max-w-xs"
-        current={currentStep}
-        items={new Array(3).fill(0).map((_, i) => (
-            {
-                icon: <StepItem key={i} active={currentStep >= i}/>
-            }
-        ))}
-    />
-}
-
-const StepItem = ({active}: { active?: boolean }) => {
-    return <div
-        className={cn("flex items-center justify-center size-10 rounded-full border-2 border-gray-200", active && "border-primary")}>
-        <div className={cn("size-3 rounded-full bg-gray-200", active && "bg-primary")}></div>
-    </div>
-}
-
 
 interface FormValues {
     full: string;
     phone: string;
     city: string;
     zip: string;
-    authUS: boolean;
+    authUS: string;
 }
 
 const CForm = () => {
-
-    const US_PHONE_REGEX = /^\+1\s\(\d{3}\)\s\d{3}-\d{4}$/;
-
-
+    const {push} = useRouter();
     const [form] = Form.useForm();
 
+    const US_PHONE_REGEX = /^\+1\s\(\d{3}\)\s\d{3}-\d{4}$/;
+    const [otp, setOTP] = useState<string>();
+
+
     const selectModal = useRef<ModalRef>(null)
-    // const {push} = useRouter();
+    const otpModal = useRef<ModalRef>(null)
+
 
     const onSubmit = async (values: FormValues) => {
         console.log('Values', values);
@@ -76,6 +61,10 @@ const CForm = () => {
         <ModalSelect
             ref={selectModal}
             title="Authorized to work in the U.S.?"
+            onChange={(val) => {
+                selectModal.current?.close()
+                form.setFieldValue("authUS", val === "yes" ? "Yes" : "No");
+            }}
             items={
                 [
                     {
@@ -88,6 +77,38 @@ const CForm = () => {
                     }
                 ]
             }/>
+
+        <CustomModal
+            ref={otpModal}
+            title="Enter the code"
+            subtitle="Enter the 4-digit code sent to your phone number."
+            onSubmit={() => console.log("submit")}
+            onClose={() => {
+                setOTP("")
+            }}
+            buttonsTitle={{
+                close: "Cancel",
+                action: "Confirm"
+            }}
+        >
+            <div className="w-full flex flex-col gap-2">
+                <p className="font-medium text-gray-700 text-sm">Secure code</p>
+                <div className="flex gap-2 items-center">
+                    <OTPInput
+                        value={otp}
+                        onInput={(val) => setOTP(val.join(''))}
+                        onChange={() => {
+                            otpModal.current?.close()
+                        }}
+                    />
+                    <Button type="text" size="middle"
+                            className="!text-primary-700 !font-semibold !text-base">
+                        Resend
+                    </Button>
+                </div>
+            </div>
+
+        </CustomModal>
         <Form<FormValues>
             layout="vertical"
             form={form}
@@ -134,7 +155,8 @@ const CForm = () => {
                     />
                 </Form.Item>
 
-                <Button type="text" size="middle" className="!text-primary-700 !font-semibold">
+                <Button onClick={() => otpModal.current?.open()} type="text" size="middle"
+                        className="!text-primary-700 !font-semibold">
                     Send code
                 </Button>
             </div>
@@ -197,6 +219,13 @@ const CForm = () => {
                     );
                 }}
             </Form.Item>
+            <div className="flex justify-center mb-4">
+                <Button onClick={() => push("signUp", {params: {mode: "verifyEmail"}})} type="text" size="middle"
+                        className="!text-primary-700 !font-semibold !text-base">
+                    <ArrowLeft size="20" color={themeColors.primary[700]}/>
+                    Back
+                </Button>
+            </div>
         </Form>
     </>
 }

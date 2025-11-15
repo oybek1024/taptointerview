@@ -52,6 +52,7 @@ const CustomModalFooter = ({
 
 export interface CustomModalProps {
     title?: string;
+    subtitle?: string;
     width?: number;
     children?: ReactNode;
     loading?: boolean;
@@ -67,6 +68,7 @@ export interface CustomModalProps {
 export const CustomModal = forwardRef<ModalRef, CustomModalProps>(
     ({
          title = "Custom Modal",
+         subtitle = "Custom Modal subtitle",
          children,
          loading = false,
          disabled = false,
@@ -95,7 +97,7 @@ export const CustomModal = forwardRef<ModalRef, CustomModalProps>(
         return (
             <Modal
                 width={width}
-                title={<Title title={title} onClose={() => closed()}/>}
+                title={<Title title={title} subtitle={subtitle} onClose={() => closed()}/>}
                 open={open}
                 closeIcon={null}
                 onCancel={closed}
@@ -118,10 +120,13 @@ export const CustomModal = forwardRef<ModalRef, CustomModalProps>(
     }
 );
 
-const Title = ({title, onClose}: { title: string, onClose?: () => void }) => {
-    return <div className="flex justify-between items-center pb-4">
-        <p className="font-semibold text-[18px] text-slate-gray">{title}</p>
-        <div onClick={onClose} className="cursor-pointer">
+const Title = ({title, onClose, subtitle}: { title: string, subtitle?: string, onClose?: () => void }) => {
+    return <div className="flex justify-between items-start pb-4">
+        <div className="flex-col flex">
+            <p className="font-semibold text-[18px] text-slate-gray">{title}</p>
+            <p className="font-light text-sm text-slate-gray">{subtitle}</p>
+        </div>
+        <div onClick={onClose} className="cursor-pointer transform translate-y-1">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M13 1L1 13M1 1L13 13" stroke="#667085"
                       style={{fill: 'gray'}}

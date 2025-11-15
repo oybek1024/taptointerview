@@ -4,13 +4,9 @@ import {RadioSelect} from "@/components/RadioSelect.tsx";
 
 interface Props {
     items: { title: string; subtitle?: string, value: string | number }[];
-    // value?: string | number | (string | number)[];
     title?: string;
-    onChange?: (
-        value: string | number | undefined
-    ) => void;
-    // otherFieldValue?: string | number;
-    // mode?: "radio" | "checkbox"; // 🔹 new
+    value?: string | number;
+    onChange?: (value: string | number) => void;
 }
 
 export const ModalSelect = forwardRef<ModalRef, Props>(
@@ -18,12 +14,13 @@ export const ModalSelect = forwardRef<ModalRef, Props>(
         {
             items,
             title,
-            onChange
+            onChange,
+            value
         },
         ref
     ) => {
         const selectModal = useRef<ModalRef>(null);
-        const [value, setValue] = useState<string | number>();
+        const [radioValue, setRadioValue] = useState(value);
 
         useImperativeHandle(ref, () => ({
             open: () => {
@@ -37,7 +34,7 @@ export const ModalSelect = forwardRef<ModalRef, Props>(
         return <CustomModal
             ref={selectModal}
             title={title}
-            onSubmit={() => onChange?.(value)}
+            onSubmit={() => onChange?.(radioValue!)}
             buttonsTitle={{
                 close: "Cancel",
                 action: "Confirm"
@@ -45,8 +42,8 @@ export const ModalSelect = forwardRef<ModalRef, Props>(
         >
             <RadioSelect
                 items={items}
-                value={value}
-                onChange={(val) => setValue(val)}
+                value={radioValue}
+                onChange={(val) => setRadioValue(val)}
                 className="gap-2.5"
             />
         </CustomModal>

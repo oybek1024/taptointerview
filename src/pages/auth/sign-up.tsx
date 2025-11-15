@@ -1,9 +1,10 @@
 import {useRouter} from "@/hooks/useRouter.ts";
-import {AccountType, CreateAccount} from "@/pages/auth/sub";
+import {AccountType, CreateAccount, Qualifications} from "@/pages/auth/sub";
 import {VerifyEmail} from "@/pages/auth/sub/verify-email.tsx";
 import {TellAboutYou} from "@/pages/auth/sub/tell-about-you.tsx";
+import {JobPreferences} from "@/pages/auth/sub/job-preferences.tsx";
 
-type SignUpMode = "accountType" | "createAccount" | "verifyEmail" | "tellUsAboutYou";
+type SignUpMode = "accountType" | "createAccount" | "verifyEmail" | "tellUsAboutYou" | "jobPreferences" | "qualifications";
 
 export const SignUp = () => {
     const {params} = useRouter<{ mode: SignUpMode }>()
@@ -21,6 +22,12 @@ export const SignUp = () => {
 
             case "tellUsAboutYou":
                 return <TellAboutYou/>
+
+            case "jobPreferences":
+                return <JobPreferences/>
+
+            case "qualifications":
+                return <Qualifications/>
             default:
                 return null
         }

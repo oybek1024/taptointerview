@@ -34,6 +34,18 @@ export const AntProvider = ({children}: { children: ReactNode }) => {
                 padding: 0,
                 margin: 0,
                 titleLineHeight: 40
+            },
+            Slider: {
+                dotSize: 20,
+                handleSize: 16,
+                railSize: 10,
+                borderRadiusXS: 10,
+                trackBg: themeColors.primary[500],
+                handleColor: themeColors.primary[500]
+            },
+            Upload: {
+                padding: 8,
+                borderRadiusLG: 20
             }
         }
     }}>
