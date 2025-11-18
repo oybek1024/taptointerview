@@ -3,18 +3,19 @@ import {RadioSelect} from "@/components/RadioSelect.tsx";
 import {Button} from "antd";
 import {useState} from "react";
 import {useRouter} from "@/hooks/useRouter.ts";
+import type {SelectItem, SelectValue} from "@/components/types.ts";
 
 export const AccountType = () => {
     const {push} = useRouter();
-    const [value, setValue] = useState<string | number>();
-    const items = [
+    const [value, setValue] = useState<SelectValue | SelectValue[]>();
+    const items: SelectItem[] = [
         {
-            title: 'Job Seeker',
+            label: 'Job Seeker',
             subtitle: 'Find jobs. Interview instantly.',
             value: 1
         },
         {
-            title: 'Employer',
+            label: 'Employer',
             subtitle: 'Post jobs. Hire faster.',
             value: 2
         }

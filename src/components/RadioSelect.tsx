@@ -71,14 +71,13 @@ export const RadioSelect = ({
         if (mode === 'multiple') {
             let newValue: SelectValue[] = Array.isArray(value) ? [...value] : [];
             if (newValue.includes(itemValue)) {
-                newValue = newValue.filter(v => v !== itemValue); // unselect
+                newValue = newValue.filter(v => v !== itemValue);
             } else {
-                newValue.push(itemValue); // select
+                newValue.push(itemValue);
             }
             onChange(newValue);
         } else {
-            console.log('ii', itemValue)
-            onChange(itemValue); // single select
+            onChange(itemValue);
         }
     };
 

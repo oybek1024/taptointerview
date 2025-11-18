@@ -3,8 +3,9 @@ import {CustomModal, type ModalRef} from "@/components/Modals.tsx";
 import {ArrowDown2} from "iconsax-reactjs";
 import {themeColors} from "@/config/theme.ts";
 import {Input} from "antd";
-import type {SelectItem, SelectMode, SelectValue, SelectTreeItem} from "@/components/types.ts";
+import type {SelectItem, SelectMode, SelectTreeItem, SelectValue} from "@/components/types.ts";
 import {RadioSelect} from "@/components/RadioSelect.tsx";
+import {getLabelByValue} from "@/utils";
 
 
 interface Props {
@@ -14,22 +15,6 @@ interface Props {
     placeholder?: string;
     value?: SelectValue | SelectValue[];
     onChange?: (value: SelectValue | SelectValue[]) => void;
-}
-
-function isTreeItem(item: SelectItem | SelectTreeItem): item is SelectTreeItem {
-    return (item as SelectTreeItem).items !== undefined;
-}
-
-function getLabelByValue(items: SelectItem[] | SelectTreeItem[], value: SelectValue): string | undefined {
-    for (const item of items) {
-        if (isTreeItem(item)) {
-            const found = item.items.find(i => i.value === value);
-            if (found) return found.label;
-        } else {
-            if (item.value === value) return item.label;
-        }
-    }
-    return undefined;
 }
 
 export const CustomSelect = ({title, mode = 'single', items, placeholder, value: propValue, onChange}: Props) => {

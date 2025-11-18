@@ -46,6 +46,12 @@ export const AntProvider = ({children}: { children: ReactNode }) => {
             Upload: {
                 padding: 8,
                 borderRadiusLG: 20
+            },
+            Popover: {
+                boxShadowSecondary: "",
+                colorBgElevated: "white",
+                padding: 0,
+                margin: 0,
             }
         }
     }}>

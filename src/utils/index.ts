@@ -1,3 +1,5 @@
+import type {SelectItem, SelectTreeItem, SelectValue} from "@/components/types.ts";
+
 export const replacePathParams = (
     path: string,
     params: Record<string, string | number>
@@ -32,4 +34,38 @@ export function formatUSPhone(value: string): string {
     }
 
     return country;
+}
+
+export function isTreeItem(item: SelectItem | SelectTreeItem): item is SelectTreeItem {
+    return (item as SelectTreeItem).items !== undefined;
+}
+
+export function getLabelByValue(items: SelectItem[] | SelectTreeItem[], value: SelectValue): string | undefined {
+    for (const item of items) {
+        if (isTreeItem(item)) {
+            const found = item.items.find(i => i.value === value);
+            if (found) return found.label;
+        } else {
+            if (item.value === value) return item.label;
+        }
+    }
+    return undefined;
+}
+
+export const getDisplayValue = (value: SelectValue | SelectValue[] | undefined, items: SelectItem[] | SelectTreeItem[]): string => {
+    if (!value) return "";
+
+    if (Array.isArray(value)) {
+        const labels = value.map(v => getLabelByValue(items, v)).filter(Boolean) as string[];
+        return labels.join(", ");
+    } else {
+        return getLabelByValue(items, value) ?? String(value);
+    }
+};
+
+export function cutText(text: string, maxLength: 30) {
+    if (text.length > maxLength) {
+        return text.slice(0, maxLength) + "...";
+    }
+    return text;
 }
