@@ -19,7 +19,8 @@ export const findRoutePath = (
         }
 
         if (route.id === id) {
-            return fullPath;
+
+            return fullPath.replace("//", "/");
         }
 
         if (route.children) {

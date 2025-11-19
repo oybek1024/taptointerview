@@ -1,6 +1,5 @@
 import {useLocation, useNavigate, useParams} from "react-router";
-import {findRouteByPath, findRoutePath} from "@/router";
-import {_routes as routes} from "@/router";
+import {_routes as routes, findRouteByPath, findRoutePath} from "@/router";
 import {replacePathParams} from "@/utils";
 import qs from "qs";
 

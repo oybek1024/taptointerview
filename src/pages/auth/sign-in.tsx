@@ -4,7 +4,7 @@ import {Eye, EyeSlash} from "iconsax-reactjs";
 import {themeColors} from "@/config/theme.ts";
 import {useRouter} from "@/hooks/useRouter.ts";
 
-export const Login = () => {
+export const SignIn = () => {
     const {push} = useRouter();
 
     return <div className="flex flex-col gap-4 mt-8">

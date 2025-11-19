@@ -5,8 +5,12 @@ import {AuthLayout} from "../layouts/auth-layout.tsx";
 import {SignUp} from "@/pages/auth/sign-up.tsx";
 import {View} from "@/pages/view.tsx";
 import {JobFeedList} from "@/pages/main/job-feed";
-import {Login} from "@/pages/auth/sub/login.tsx";
+import {SignIn} from "@/pages/auth/sign-in.tsx";
 import {ForgotPassword} from "@/pages/auth/sub/forgot-password.tsx";
+import {Home} from "@/pages/main";
+import {SavedJobList} from "@/pages/main/job-feed/saved-jobs.tsx";
+import {MyInterviewList} from "@/pages/main/myInterview";
+import {SettingsPage} from "@/pages/main/settings";
 
 
 export const _routes: RouteObject[] = [
@@ -17,9 +21,29 @@ export const _routes: RouteObject[] = [
         middleware: [mainLayoutGuard],
         children: [
             {
-                id: 'jobFeed',
+                id: 'home',
                 index: true,
+                Component: Home
+            },
+            {
+                id: 'jobFeed',
+                path: 'jobFeed',
                 Component: JobFeedList
+            },
+            {
+                id: 'savedJobs',
+                path: 'savedJobs',
+                Component: SavedJobList
+            },
+            {
+                id: 'myInterviews',
+                path: 'myInterviews',
+                Component: MyInterviewList
+            },
+            {
+                id: 'settings',
+                path: 'settings',
+                Component: SettingsPage
             }
         ]
     },
@@ -34,13 +58,13 @@ export const _routes: RouteObject[] = [
                 Component: View
             },
             {
-                id: "login",
-                path: "login",
-                Component: Login
+                id: "signIn",
+                path: "signIn",
+                Component: SignIn
             },
             {
                 id: "forgotPassword",
-                path: "forgot-password",
+                path: "forgotPassword",
                 Component: ForgotPassword
             },
             {

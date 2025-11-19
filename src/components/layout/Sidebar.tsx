@@ -4,26 +4,28 @@ import {ArchiveTick, Briefcase, Logout, Setting2, TableDocument} from "iconsax-r
 import {themeColors} from "@/config/theme.ts";
 import UserAvatar from "@/assets/user_icon.png";
 import {useState} from "react";
+import {useRouter} from "@/hooks/useRouter.ts";
+import {cn} from "@/lib/utils.ts";
 
 const {Sider} = Layout;
 
 type MenuItem = Required<MenuProps>['items'][number];
 
 export const Sidebar = () => {
-
+    const {currentRoute, push} = useRouter()
     const items: MenuItem[] = [
         {
-            key: '1',
+            key: 'jobFeed',
             label: 'Job Feed',
             icon: <Briefcase size="24" color={themeColors.gray[700]} variant="Outline"/>
         },
         {
-            key: '2',
+            key: 'myInterviews',
             label: 'My Interviews',
             icon: <TableDocument size="24" color={themeColors.gray[700]} variant="Outline"/>
         },
         {
-            key: '3',
+            key: 'savedJobs',
             label: 'Saved Jobs',
             icon: <ArchiveTick size="24" color={themeColors.gray[700]} variant="Outline"/>
         },
@@ -59,18 +61,24 @@ export const Sidebar = () => {
             />
         </div>
         <Menu
+            defaultSelectedKeys={[currentRoute.id!]}
             mode="inline"
             style={{background: "white"}}
             items={items}
             className="!px-3"
+            onSelect={({key}) => push(key)}
         />
 
 
         <div className="px-4 fixed bottom-10">
             <div
-                className="cursor-pointer px-3 py-2 flex gap-3 hover:bg-[rgba(0,0,0,0.06)] rounded-xl transition items-center">
+                role="button"
+                onClick={() => push('settings')}
+                className={cn("cursor-pointer px-3 py-2 flex gap-3 hover:bg-[rgba(0,0,0,0.06)]  rounded-xl transition items-center", currentRoute.id === "settings" && "bg-primary-50")}
+            >
                 <Setting2 size="24" color={themeColors.gray[700]} variant="Outline"/>
-                <p style={{color: 'rgba(0,0,0,0.88)'}}>Settings</p>
+                <p className={cn("font-semibold text-gray-700", currentRoute.id === "settings" && "text-primary")}>Settings
+                </p>
             </div>
             <Divider size="middle"/>
             <div className="flex items-center gap-4">

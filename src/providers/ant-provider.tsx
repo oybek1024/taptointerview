@@ -52,6 +52,12 @@ export const AntProvider = ({children}: { children: ReactNode }) => {
                 colorBgElevated: "white",
                 padding: 0,
                 margin: 0,
+            },
+            Segmented: {
+                itemSelectedBg: themeColors.primary[500],
+                itemSelectedColor: "white",
+                trackPadding: 3,
+                trackBg: themeColors.custom.unknownGray,
             }
         }
     }}>

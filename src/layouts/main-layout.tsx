@@ -13,11 +13,11 @@ export const MainLayout = () => {
     return <Layout style={{minHeight: '100vh'}}>
         <Sidebar/>
         <Layout>
-            <Header className="flex items-center !bg-white !px-10">
+            <Header className="flex items-center !bg-white !px-10 !h-20">
                 <AppBar/>
                 {/*<Breadcrumb style={{margin: '16px 0'}} items={[{title: 'User'}, {title: 'Bill'}]}/>*/}
             </Header>
-            <Content className="!px-10 !py-5 !bg-white">
+            <Content className="!px-10 !py-2 !bg-white">
                 <Outlet/>
             </Content>
         </Layout>

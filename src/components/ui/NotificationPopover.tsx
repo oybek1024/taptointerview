@@ -115,9 +115,6 @@ export const NotificationPopover = ({
                                 id={index}
                                 onClick={() => handleNotificationClick(notification.id)}
                             />
-                            {/*{index < localNotifications.length - 1 && (*/}
-                            {/*    <div className="h-px bg-[#eaecf0] mx-6"/>*/}
-                            {/*)}*/}
                         </div>
                     ))
                 )}
