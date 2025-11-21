@@ -4,8 +4,13 @@ import {createPortal} from "react-dom";
 export const HeaderTitle = ({children}: { children: ReactNode }) => {
     const [targetNode, setTargetNode] = useState<HTMLElement | null>(null);
     useEffect(() => {
-        setTargetNode(document.getElementById("appBarHeaderTitle"));
+        const node = document.getElementById("appBarHeaderTitle")!
+        const breadNode = document.getElementById("appBarBreadCrumb")!
+        node.classList.remove("hidden");
+        breadNode.classList.add("hidden");
+        setTargetNode(node);
     }, []);
+
     return targetNode ? (
         createPortal(
             <>
@@ -14,7 +19,5 @@ export const HeaderTitle = ({children}: { children: ReactNode }) => {
             targetNode,
             "appBarHeaderTitle"
         )
-    ) : (
-        <>TapToInterview</>
-    );
+    ) : null;
 };

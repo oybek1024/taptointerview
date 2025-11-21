@@ -46,6 +46,10 @@ const CForm = () => {
 
     const onSubmit = async (values: FormValues) => {
         console.log('Values', values);
+        localStorage.setItem('token', 'blah blah')
+        setTimeout(() => {
+            push("home")
+        }, 100)
         // TODO: Implement login logic
     }
 

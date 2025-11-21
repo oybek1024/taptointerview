@@ -1,14 +1,34 @@
-import {PageTitle} from "@/pages/auth/components/page-title.tsx";
-import {CSteps} from "@/components/CSteps.tsx";
-import {CustomSelect} from "@/components/CSelect.tsx";
+import {HeaderBreadcrumb} from "@/portals/header-breadcrumb.tsx";
+import {Button, Form} from "antd";
 import type {SelectItem} from "@/components/types.ts";
-import {Button, Form, Upload} from "antd";
-import {Add, ArrowLeft} from "iconsax-reactjs";
+import {CustomSelect} from "@/components";
+import {Add} from "iconsax-reactjs";
 import {themeColors} from "@/config/theme.ts";
-import {useRouter} from "@/hooks/useRouter.ts";
 import type {UploadFile} from "antd/es/upload/interface";
+import Dragger from "antd/es/upload/Dragger";
 
-const {Dragger} = Upload;
+export const Qualifications = () => {
+    return <div className="flex flex-col gap-6">
+        <HeaderBreadcrumb
+            items={[
+                {
+                    title: "Settings",
+                    routeId: "settings"
+                },
+                {
+                    title: "Qualifications",
+                }
+            ]}/>
+        <div className="flex justify-between items-center">
+            <p className="font-semibold text-3xl">Qualifications</p>
+            <Button type="primary" size="large" variant="solid">
+                Save Changes
+            </Button>
+        </div>
+        <QualificationForm/>
+    </div>
+}
+
 
 const educationOptions: SelectItem[] = [
     {
@@ -18,6 +38,10 @@ const educationOptions: SelectItem[] = [
     {
         label: "Not degree",
         value: "not_degree",
+    },
+    {
+        label: "Medium degree",
+        value: "medium_degree",
     },
 ]
 
@@ -75,34 +99,31 @@ const languagesOptions: SelectItem[] = [
     },
 ]
 
-export const Qualifications = () => {
-
-    return <div className="flex flex-col gap-5 mt-4 pt-5 w-sm">
-        <div className="flex items-center justify-center">
-            <CSteps currentStep={2}/>
-        </div>
-
-        <PageTitle
-            title="Qualifications"
-            subtitle="Tell us more about your background."
-        />
-
-        <CForm/>
-
-    </div>
-}
+const states: SelectItem[] = [
+    {
+        label: "California",
+        value: "california",
+    },
+    {
+        label: "New york",
+        value: "new_york",
+    },
+    {
+        label: "Texas",
+        value: "texas",
+    }
+]
 
 interface FormValues {
     education?: string;
     certifications?: UploadFile[];
     driverLicense?: string;
     languages?: string[];
+    state?: string;
 }
 
-const CForm = () => {
-    const {push} = useRouter();
+const QualificationForm = () => {
     const [form] = Form.useForm<FormValues>();
-
     const onSubmit = async (values: FormValues) => {
         console.log('Values', values);
     }
@@ -111,6 +132,7 @@ const CForm = () => {
         layout="vertical"
         form={form}
         onFinish={onSubmit}
+        className="max-w-xl"
     >
         <Form.Item<FormValues>
             label="Education / Degree (optional)"
@@ -166,6 +188,24 @@ const CForm = () => {
         </Form.Item>
 
         <Form.Item<FormValues>
+            label="State"
+            name="state"
+            rules={[
+                {
+                    required: true,
+                    message: "Please select an option",
+                }
+            ]}
+        >
+            <CustomSelect
+                title="State"
+                mode="single"
+                placeholder="Select your state"
+                items={states}
+            />
+        </Form.Item>
+
+        <Form.Item<FormValues>
             label="Languages you speak"
             name="languages"
             rules={[
@@ -182,36 +222,5 @@ const CForm = () => {
                 items={languagesOptions}
             />
         </Form.Item>
-
-        <Form.Item shouldUpdate>
-            {() => {
-                const hasErrors = form
-                    .getFieldsError()
-                    .some((field) => field.errors.length > 0);
-                const isDirty = form.isFieldsTouched(true);
-
-                return (
-                    <Button
-                        block
-                        size="large"
-                        type="primary"
-                        variant="solid"
-                        htmlType="submit"
-                        className="mt-2"
-                        disabled={hasErrors || !isDirty}
-                    >
-                        Continue
-                    </Button>
-                );
-            }}
-        </Form.Item>
-        <div className="flex justify-center mb-4">
-            <Button onClick={() => push("signUp", {params: {mode: "jobPreferences"}})} type="text" size="middle"
-                    className="!text-primary-700 !font-semibold !text-base">
-                <ArrowLeft size="20" color={themeColors.primary[700]}/>
-                Back
-            </Button>
-        </div>
     </Form>
 }
-

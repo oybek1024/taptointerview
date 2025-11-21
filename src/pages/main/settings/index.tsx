@@ -1,11 +1,15 @@
 import {HeaderTitle} from "@/portals/header-title.tsx";
-import {ArrowRight2, LogoutCurve} from "iconsax-reactjs";
+import {ArrowRight2, Logout, LogoutCurve} from "iconsax-reactjs";
 import {themeColors} from "@/config/theme.ts";
 import {cn} from "@/lib/utils.ts";
 import {Divider} from "antd";
+import {useRouter} from "@/hooks/useRouter.ts";
+import {DestructiveModal, type ModalRef} from "@/components";
+import {useRef} from "react";
 
 type SettingsItem = {
     label: string;
+    routeId?: string;
     onClick?: () => void;
     isDestructive?: boolean;
 };
@@ -19,9 +23,9 @@ const settingsSections: SettingsSection[] = [
     {
         title: "Details",
         items: [
-            {label: "Personal Info"},
-            {label: "Preferences"},
-            {label: "Qualifications"},
+            {label: "Personal Info", routeId: "personalInfo"},
+            {label: "Preferences", routeId: "preferences"},
+            {label: "Qualifications", routeId: "qualifications"},
             {label: "Change Password"},
         ]
     },
@@ -61,7 +65,7 @@ const SettingsItemComponent = ({label, onClick, isDestructive}: SettingsItem) =>
                 <span
                     className={cn(
                         "text-base font-semibold",
-                        isDestructive ? "text-[#f04438]" : "text-[#2b2b2b]"
+                        isDestructive ? "text-error-500" : "text-slate-gray"
                     )}
                 >
                 {label}
@@ -69,7 +73,7 @@ const SettingsItemComponent = ({label, onClick, isDestructive}: SettingsItem) =>
             </div>
             <ArrowRight2
                 size={20}
-                color={isDestructive ? "#f04438" : themeColors.gray[500]}
+                color={isDestructive ? themeColors.error[500] : themeColors.gray[500]}
                 variant="Outline"
             />
         </div>
@@ -77,16 +81,40 @@ const SettingsItemComponent = ({label, onClick, isDestructive}: SettingsItem) =>
 };
 
 export const SettingsPage = () => {
+    const {push} = useRouter();
+    const deleteAccountModal = useRef<ModalRef>(null);
+
+    const handleItemClick = (item: SettingsItem) => {
+        if (item.routeId) {
+            return push(item.routeId);
+        }
+        if (item.isDestructive) {
+            return deleteAccountModal.current?.open();
+        }
+    };
+
     return (
         <div className="flex flex-col w-full gap-4">
             <HeaderTitle>
                 Settings
             </HeaderTitle>
 
+            <DestructiveModal
+                ref={deleteAccountModal}
+                title="Log out"
+                content="Are you sure you want to log out?"
+                buttonsTitle={{
+                    close: "Cancel",
+                    action: "Log out"
+                }}
+                onSubmit={() => deleteAccountModal.current?.close()}
+                icon={<Logout size="24" color={themeColors.error[500]}/>}
+            />
+
             <div className="flex flex-col gap-8 py-2">
                 {settingsSections.map((section, sectionIndex) => (
-                    <>
-                        <div key={sectionIndex} className="flex gap-4">
+                    <div key={sectionIndex}>
+                        <div className="flex gap-4">
                             <h2 className="text-lg font-semibold text-gray-dark min-w-xs">
                                 {section.title}
                             </h2>
@@ -95,16 +123,13 @@ export const SettingsPage = () => {
                                     <SettingsItemComponent
                                         key={itemIndex}
                                         {...item}
-                                        onClick={() => {
-                                            console.log(`Navigate to: ${item.label}`);
-                                            item.onClick?.();
-                                        }}
+                                        onClick={() => handleItemClick(item)}
                                     />
                                 ))}
                             </div>
                         </div>
                         {sectionIndex < settingsSections.length - 1 && (<Divider size="small" className="!py-0"/>)}
-                    </>
+                    </div>
                 ))}
             </div>
         </div>

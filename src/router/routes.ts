@@ -3,7 +3,6 @@ import {mainLayoutGuard} from "@/router";
 import {MainLayout} from "../layouts/main-layout.tsx";
 import {AuthLayout} from "../layouts/auth-layout.tsx";
 import {SignUp} from "@/pages/auth/sign-up.tsx";
-import {View} from "@/pages/view.tsx";
 import {JobFeedList} from "@/pages/main/job-feed";
 import {SignIn} from "@/pages/auth/sign-in.tsx";
 import {ForgotPassword} from "@/pages/auth/sub/forgot-password.tsx";
@@ -11,6 +10,11 @@ import {Home} from "@/pages/main";
 import {SavedJobList} from "@/pages/main/job-feed/saved-jobs.tsx";
 import {MyInterviewList} from "@/pages/main/myInterview";
 import {SettingsPage} from "@/pages/main/settings";
+import {PersonalInfo} from "@/pages/main/settings/personal-info.tsx";
+import {Auth} from "@/pages/auth";
+import {View} from "@/pages/view.tsx";
+import {Preferences} from "@/pages/main/settings/preferences.tsx";
+import {Qualifications} from "@/pages/main/settings/qualifications.tsx";
 
 
 export const _routes: RouteObject[] = [
@@ -43,8 +47,29 @@ export const _routes: RouteObject[] = [
             {
                 id: 'settings',
                 path: 'settings',
-                Component: SettingsPage
-            }
+                Component: View,
+                children: [
+                    {
+                        index: true,
+                        Component: SettingsPage
+                    },
+                    {
+                        id: 'personalInfo',
+                        path: 'personal-info',
+                        Component: PersonalInfo
+                    },
+                    {
+                        id: 'preferences',
+                        path: 'preferences',
+                        Component: Preferences
+                    },
+                    {
+                        id: 'qualifications',
+                        path: 'qualifications',
+                        Component: Qualifications
+                    }
+                ]
+            },
         ]
     },
     {
@@ -55,7 +80,7 @@ export const _routes: RouteObject[] = [
             {
                 id: "authDefault",
                 index: true,
-                Component: View
+                Component: Auth
             },
             {
                 id: "signIn",

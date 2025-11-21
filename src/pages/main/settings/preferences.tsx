@@ -1,12 +1,43 @@
-import {PageTitle} from "@/pages/auth/components/page-title.tsx";
-import {CSteps} from "@/components/CSteps.tsx";
-import {CustomSelect} from "@/components/CSelect.tsx";
+import {HeaderBreadcrumb} from "@/portals/header-breadcrumb.tsx";
+import {Button, Form} from "antd";
+import {CustomSelect} from "@/components";
 import type {SelectItem, SelectTreeItem} from "@/components/types.ts";
-import {Button, Form, Slider} from "antd";
-import {ArrowLeft} from "iconsax-reactjs";
+import {CSlider} from "@/components/CSlider.tsx";
+import {Add} from "iconsax-reactjs";
 import {themeColors} from "@/config/theme.ts";
-import {useRouter} from "@/hooks/useRouter.ts";
+import type {UploadFile} from "antd/es/upload/interface";
+import Dragger from "antd/es/upload/Dragger";
 
+export const Preferences = () => {
+    return <div className="flex flex-col gap-6">
+        <HeaderBreadcrumb
+            items={[
+                {
+                    title: "Settings",
+                    routeId: "settings"
+                },
+                {
+                    title: "Preferences",
+                }
+            ]}/>
+        <div className="flex justify-between items-center">
+            <p className="font-semibold text-3xl">Preferences</p>
+            <Button type="primary" size="large" variant="solid">
+                Save Changes
+            </Button>
+        </div>
+        <PreferenceForm/>
+
+    </div>
+}
+
+interface FormValues {
+    jobCategory: string;
+    payRange: [number, number];
+    availability: string;
+    startDate: string;
+    resume?: UploadFile;
+}
 
 const categories: SelectTreeItem[] = [
     {
@@ -20,10 +51,6 @@ const categories: SelectTreeItem[] = [
             {
                 label: "Bartending & Serving",
                 value: 2,
-            },
-            {
-                label: "Hotel & Hospitality",
-                value: 3,
             }
         ]
     },
@@ -34,10 +61,6 @@ const categories: SelectTreeItem[] = [
             {
                 label: "Sales",
                 value: 4,
-            },
-            {
-                label: "Hotel & Sales",
-                value: 5,
             },
             {
                 label: "Restaurants & Retail",
@@ -81,40 +104,12 @@ const startDates: SelectItem[] = [
     },
 ]
 
-export const JobPreferences = () => {
-
-    return <div className="flex flex-col gap-5 mt-4 pt-5 w-sm">
-        <div className="flex items-center justify-center">
-            <CSteps currentStep={1}/>
-        </div>
-
-        <PageTitle
-            title="Job preferences"
-            subtitle="Tell us what kind of work you’re looking for."
-        />
-
-        <JobPreferenceForm/>
-
-    </div>
-}
-
-interface FormValues {
-    jobCategory: string;
-    payRange: [number, number];
-    availability: string;
-    startDate: string;
-}
-
-export const JobPreferenceForm = () => {
-    const {push} = useRouter();
+const PreferenceForm = () => {
     const [form] = Form.useForm<FormValues>();
-
 
     const onSubmit = async (values: FormValues) => {
         console.log('Values', values);
     }
-
-    const rangeWatcher = Form.useWatch('payRange', form);
 
     return <Form<FormValues>
         layout="vertical"
@@ -123,6 +118,7 @@ export const JobPreferenceForm = () => {
         initialValues={{
             payRange: [20, 80]
         }}
+        className="max-w-xl"
     >
         <Form.Item<FormValues>
             label="Job category"
@@ -152,14 +148,7 @@ export const JobPreferenceForm = () => {
                 }
             ]}
         >
-            <Slider
-                range
-                marks={rangeWatcher?.reduce((acc, val) => {
-                    acc[val] = `${val}/hr`;
-                    return acc;
-                }, {} as Record<number, string>)}
-                onChange={(val) => form.setFieldValue("payRange", val)}
-            />
+            <CSlider/>
         </Form.Item>
 
         <Form.Item<FormValues>
@@ -198,34 +187,27 @@ export const JobPreferenceForm = () => {
             />
         </Form.Item>
 
-        <Form.Item shouldUpdate>
-            {() => {
-                const hasErrors = form
-                    .getFieldsError()
-                    .some((field) => field.errors.length > 0);
-                const isDirty = form.isFieldsTouched(true);
-
-                return (
-                    <Button
-                        block
-                        size="large"
-                        type="primary"
-                        variant="solid"
-                        htmlType="submit"
-                        className="mt-2"
-                        disabled={hasErrors || !isDirty}
-                    >
-                        Continue
-                    </Button>
-                );
+        <Form.Item<FormValues>
+            label="Resume (optional)"
+            name="resume"
+            valuePropName="fileList"
+            getValueFromEvent={(e) => {
+                if (Array.isArray(e)) {
+                    return e;
+                }
+                return e?.fileList;
             }}
+        >
+            <Dragger
+                listType="text"
+                multiple
+                beforeUpload={() => false}
+                className="!p-0"
+            >
+                <div className="flex justify-center items-center w-full">
+                    <Add size="32" color={themeColors.primary[500]}/>
+                </div>
+            </Dragger>
         </Form.Item>
-        <div className="flex justify-center mb-4">
-            <Button onClick={() => push("signUp", {params: {mode: "tellUsAboutYou"}})} type="text" size="middle"
-                    className="!text-primary-700 !font-semibold !text-base">
-                <ArrowLeft size="20" color={themeColors.primary[700]}/>
-                Back
-            </Button>
-        </div>
     </Form>
 }

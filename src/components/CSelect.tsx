@@ -1,11 +1,11 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {CustomModal, type ModalRef} from "@/components/Modals.tsx";
-import {ArrowDown2} from "iconsax-reactjs";
+import {Add, ArrowDown2} from "iconsax-reactjs";
 import {themeColors} from "@/config/theme.ts";
 import {Input} from "antd";
 import type {SelectItem, SelectMode, SelectTreeItem, SelectValue} from "@/components/types.ts";
 import {RadioSelect} from "@/components/RadioSelect.tsx";
-import {getLabelByValue} from "@/utils";
+import {getDisplayValue} from "@/utils";
 
 
 interface Props {
@@ -14,10 +14,17 @@ interface Props {
     mode?: SelectMode;
     placeholder?: string;
     value?: SelectValue | SelectValue[];
-    onChange?: (value: SelectValue | SelectValue[]) => void;
+    onChange?: (value: SelectValue | SelectValue[] | undefined) => void;
 }
 
-export const CustomSelect = ({title, mode = 'single', items, placeholder, value: propValue, onChange}: Props) => {
+export const CustomSelect = ({
+                                 title,
+                                 mode = 'single',
+                                 items,
+                                 placeholder,
+                                 value: propValue,
+                                 onChange
+                             }: Props) => {
     const selectModal = useRef<ModalRef>(null)
     const initialValue = mode === "multiple" ? ([] as SelectValue[]) : undefined;
     const [value, setValue] = useState<SelectValue | SelectValue[] | undefined>(
@@ -33,29 +40,24 @@ export const CustomSelect = ({title, mode = 'single', items, placeholder, value:
         setValue(val);
     };
 
-    const getDisplayValue = (): string => {
-        if (!value) return "";
-        
-        if (Array.isArray(value)) {
-            const labels = value.map(v => getLabelByValue(items, v)).filter(Boolean) as string[];
-            return labels.join(", ");
-        } else {
-            return getLabelByValue(items, value) ?? String(value);
-        }
-    };
+    const displayValue = useMemo(() => {
+        return getDisplayValue(propValue, items)
+    }, [items, propValue])
 
-    const displayValue = getDisplayValue();
+    const submit = (value: SelectValue | SelectValue[]) => {
+        onChange?.(value);
+        selectModal.current?.close();
+    }
+
+    const clear = () => {
+        onChange?.(undefined)
+    }
 
     return <>
         <CustomModal
             ref={selectModal}
             title={title}
-            onSubmit={() => {
-                if (value !== undefined) {
-                    onChange?.(value);
-                    selectModal.current?.close();
-                }
-            }}
+            onSubmit={() => submit(value!)}
             buttonsTitle={{
                 close: "Cancel",
                 action: "Confirm"
@@ -76,13 +78,19 @@ export const CustomSelect = ({title, mode = 'single', items, placeholder, value:
             size="large"
             variant="filled"
             placeholder={placeholder}
-            className="cursor-pointer"
             suffix={
-                <ArrowDown2
-                    onClick={() => selectModal.current?.open()}
-                    size="16"
-                    color={themeColors.gray[400]}
-                />
+                displayValue ?
+                    <Add
+                        onClick={clear}
+                        size="24"
+                        color={themeColors.gray[400]}
+                        className="rotate-45 cursor-pointer"
+                    /> :
+                    <ArrowDown2
+                        onClick={() => selectModal.current?.open()}
+                        size="16"
+                        color={themeColors.gray[400]}
+                    />
             }
         />
     </>
